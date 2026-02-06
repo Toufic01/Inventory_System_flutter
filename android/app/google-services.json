@@ -1,0 +1,30 @@
+{
+  "project_info": {
+    "project_number": "44412008637",
+    "firebase_url": "https://inventory-with-flutter-default-rtdb.firebaseio.com",
+    "project_id": "inventory-with-flutter",
+    "storage_bucket": "inventory-with-flutter.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:44412008637:android:7073762d81b45091b25fd4",
+        "android_client_info": {
+          "package_name": "com.example.inventory_system"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCmcUj-7DqLSQeVMKZTfyGOf2D1O2cT-tk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
