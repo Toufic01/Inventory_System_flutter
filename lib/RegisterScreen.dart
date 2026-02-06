@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -54,12 +55,14 @@ class RegisterScreen extends StatelessWidget{
 
       try {
 
-        final newUserRef = userRef.push();
-        await newUserRef.set({
+        final credintial = await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: password);
+
+        final uid = credintial.user!.uid;
+
+        await userRef.child(uid).set({
           'username': username,
           'email': email,
           'password': password,
-          'createAt': ServerValue.timestamp,
         });
 
         Navigator.push(context, MaterialPageRoute(builder: (context) => const Homescreen()));
@@ -71,14 +74,12 @@ class RegisterScreen extends StatelessWidget{
           ),
         );
       }
-
-
     }
 
 
     // TODO: implement build
     return Scaffold(
-      backgroundColor: const Color(0xFFFEE8E8),
+      backgroundColor: const Color(0xFFFAFAFA),
       body: SafeArea(
         child: Center(
           child: ConstrainedBox(
@@ -88,6 +89,7 @@ class RegisterScreen extends StatelessWidget{
             child: Container(
               margin: const EdgeInsets.all(16),
               decoration: BoxDecoration(
+                color: Color(0xFFEED2D2),
                 border: Border.all(color: Colors.black, width: 2),
               ),
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
@@ -111,15 +113,34 @@ class RegisterScreen extends StatelessWidget{
                   ),
 
                   SizedBox(height: 40,),
-                  _InputBox(hint: 'Username', controller: usernameController),
+                  _InputBox(hint: 'Enter Username', controller: usernameController),
                   SizedBox(height: 20,),
-                  _InputBox(hint: 'Email', controller: emailController),
+                  _InputBox(hint: 'Enter your email', controller: emailController),
                   SizedBox(height: 20,),
-                  _InputBox(hint: 'Password', controller: passwordController),
+                  _InputBox(hint: 'Enter Password', controller: passwordController, obscure: true, keyboardType: TextInputType.visiblePassword),
                   SizedBox(height: 20,),
-                  _InputBox(hint: 'Confirm Password', controller: confirmPasswordController),
+                  _InputBox(hint: 'Confirm Password', controller: confirmPasswordController, obscure: true, keyboardType: TextInputType.visiblePassword),
 
                   const Spacer(), // 👈 better than spaceBetween
+
+                  SizedBox(
+                    child: Row(
+                      children: [
+                        Spacer(),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          child: Text("Already have account!! Login Here!",
+                          style: TextStyle(color: Colors.black87, fontWeight: FontWeight.normal),
+                          ),
+                        ),
+                        ),
+                      ],
+                    ),
+                  ),
+
 
                   SizedBox(
                     height: 56,
@@ -146,12 +167,10 @@ class RegisterScreen extends StatelessWidget{
         ),
       ),
     );
-
   }
 }
 
-class _InputBox extends StatelessWidget{
-
+class _InputBox extends StatelessWidget {
   final String hint;
   final TextEditingController controller;
   final bool obscure;
@@ -161,20 +180,12 @@ class _InputBox extends StatelessWidget{
     required this.hint,
     required this.controller,
     this.obscure = false,
-    this.keyboardType = TextInputType.text
+    this.keyboardType = TextInputType.text,
+    super.key,
   });
-
 
   @override
   Widget build(BuildContext context) {
-    bool isPassword = false;
-    TextInputType finalKeyboardType = keyboardType;
-
-    if (hint == 'Password' || hint == 'Confirm Password') {
-      isPassword = true;
-      finalKeyboardType = TextInputType.visiblePassword;
-    }
-
     return Container(
       height: 56,
       decoration: BoxDecoration(
@@ -184,8 +195,8 @@ class _InputBox extends StatelessWidget{
       alignment: Alignment.center,
       child: TextField(
         controller: controller,
-        obscureText: isPassword,
-        keyboardType: finalKeyboardType,
+        obscureText: obscure,
+        keyboardType: keyboardType,
         textAlign: TextAlign.center,
         decoration: InputDecoration(
           border: InputBorder.none,
@@ -194,6 +205,4 @@ class _InputBox extends StatelessWidget{
       ),
     );
   }
-
-
 }

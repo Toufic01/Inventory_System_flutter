@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:inventory_system/LoginScreen.dart';
 
 
 import 'RegisterScreen.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget{
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Inventory App',
-      home: RegisterScreen(),
+      home: Loginscreen(),
     );
   }
 }
